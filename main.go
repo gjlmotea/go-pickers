@@ -8,8 +8,15 @@ import (
 
 func main() {
 	g := number.NewPicker()
+	g.InhabitLeadingZero = true
+	g.AllowDigits = []byte{'0'}
 	g.Length = 30
 
+	fmt.Println(g.Pick())
+	fmt.Println(g.Pick())
+	fmt.Println(g.Pick())
+	fmt.Println(g.Pick())
+	fmt.Println(g.Pick())
 	fmt.Println(g.Pick())
 	fmt.Println(g.Pick())
 	fmt.Println(g.Pick())
