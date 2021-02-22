@@ -1,2 +1,2 @@
-# go-random-word
-go-random-word is a useful random word (or letter) generateor.
+# go-pickers
+go-pickers is a useful random word (or letter) generator.

@@ -15,68 +15,55 @@ const (
 	CaseAlternatingReverse        // `ApPlE` 大寫小寫交錯
 )
 
+var DefaultAplhabet = []byte{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}
+var Lowercase = []byte{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}
+var Uppercase = []byte{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'}
+
 type Picker struct {
 	// 全大寫、全小寫、字首大寫、字首小寫、大寫交錯、小寫交錯
-	Case string
+	Case int
 	// 指定數字長度，預設長度為1，因可設超長長度，所以型態為string而非int
 	Length int
 	// 允許出現的Digit，預設允許全部
-	AllowDigits []byte
-	// 禁止出現前導0
-	InhabitLeadingZero bool
-}
-
-func init() {
-	rand.Seed(time.Now().UnixNano())
+	AllowLetters []byte
 }
 
 // NewPicker returns a new Picker
 func NewPicker() (p Picker) {
+	rand.Seed(time.Now().UnixNano())
 	p.Length = 1
-	p.AllowDigits = []byte{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}
+	p.AllowLetters = append(Lowercase, Uppercase...)
 	return p
 }
 
 // Pick pick and return a random number.
 // If Picker.AllowDigits is nil, it return empty string.
 func (n *Picker) Pick() (number string) {
-	if n.AllowDigits == nil {
+	if n.AllowLetters == nil {
 		return
 	}
 
 	var bytes []byte
 	for i := 0; i < n.Length; i++ {
-		r := rand.Int() % len(n.AllowDigits)
-		d := n.AllowDigits[r]
-
-		// 如果index為第一項，並且 禁止前導0，需額外檢查AllowDigits是否只有'0'
-		if index := indexOf(n.AllowDigits, '0'); i == 0 && n.InhabitLeadingZero && index != -1 {
-			if len(n.AllowDigits) > 1 {
-				r = rand.Int() % (len(n.AllowDigits) - 1)
-				s := remove(n.AllowDigits, index)
-				d = s[r]
-
-			} else {
-				return "`Picker.InhabitLeadingZero` is enabled, but `Picker.AllowDigits` only contains '0'!"
-			}
-		}
-
+		r := rand.Int() % len(n.AllowLetters)
+		d := n.AllowLetters[r]
 		bytes = append(bytes, d)
 	}
 
 	return string(bytes)
 }
 
-func indexOf(s []byte, e byte) int {
-	for i, a := range s {
-		if a == e {
-			return i
-		}
-	}
-	return -1
+// PickUp pick and return a random number.
+// The only difference between PickUp and Pick is:
+// PickUp will remember the value which had returned,
+// and keep in a map structure to compare with the next PickUp value.
+// It means that the same value won't be returned by PickUp twice or more,
+// Just like that something(or choice) was picked up, and never put it back,
+// until use func PutAllBack.
+func (n *Picker) PickUp() (number string) {
+	return
 }
 
-func remove(s []byte, i int) []byte {
-	s[len(s)-1], s[i] = s[i], s[len(s)-1]
-	return s[:len(s)-1]
+func PutAllBack() {
+
 }

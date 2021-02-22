@@ -5,6 +5,8 @@ import (
 	"time"
 )
 
+var DefaultDigits = []byte{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}
+
 type Picker struct {
 	// 指定數字長度，預設長度為1，因可設超長長度，所以型態為string而非int
 	Length int
@@ -14,14 +16,11 @@ type Picker struct {
 	InhabitLeadingZero bool
 }
 
-func init() {
-	rand.Seed(time.Now().UnixNano())
-}
-
 // NewPicker returns a new Picker
 func NewPicker() (p Picker) {
+	rand.Seed(time.Now().UnixNano())
 	p.Length = 1
-	p.AllowDigits = []byte{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}
+	p.AllowDigits = DefaultDigits
 	return p
 }
 

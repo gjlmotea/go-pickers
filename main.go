@@ -3,13 +3,13 @@ package main
 import (
 	"fmt"
 
+	"github.com/gjlmotea/go-pickers/letter"
+
 	"github.com/gjlmotea/go-pickers/number"
 )
 
 func main() {
-	g := number.NewPicker()
-	g.InhabitLeadingZero = true
-	g.AllowDigits = []byte{'0'}
+	g := letter.NewPicker()
 	g.Length = 30
 
 	fmt.Println(g.Pick())
