@@ -11,40 +11,40 @@ type Picker struct {
 	// 指定數字長度，預設長度為1，因可設超長長度，所以型態為string而非int
 	Length int
 	// 允許出現的Digit，預設允許全部
-	AllowDigits []byte
+	Dictionary []byte
 	// 禁止出現前導0
 	InhabitLeadingZero bool
 }
 
 // NewPicker returns a new Picker
-func NewPicker() (p Picker) {
+func NewPicker() (n Picker) {
 	rand.Seed(time.Now().UnixNano())
-	p.Length = 1
-	p.AllowDigits = DefaultDigits
-	return p
+	n.Length = 1
+	n.Dictionary = DefaultDigits
+	return n
 }
 
 // Pick pick and return a random number.
-// If Picker.AllowDigits is nil, it return empty string.
+// If Picker.Dictionary is nil, it return empty string.
 func (n *Picker) Pick() (number string) {
-	if n.AllowDigits == nil {
+	if n.Dictionary == nil {
 		return
 	}
 
 	var bytes []byte
 	for i := 0; i < n.Length; i++ {
-		r := rand.Int() % len(n.AllowDigits)
-		d := n.AllowDigits[r]
+		r := rand.Int() % len(n.Dictionary)
+		d := n.Dictionary[r]
 
 		// 如果index為第一項，並且 禁止前導0，需額外檢查AllowDigits是否只有'0'
-		if index := indexOf(n.AllowDigits, '0'); i == 0 && n.InhabitLeadingZero && index != -1 {
-			if len(n.AllowDigits) > 1 {
-				r = rand.Int() % (len(n.AllowDigits) - 1)
-				s := remove(n.AllowDigits, index)
+		if index := indexOf(n.Dictionary, '0'); i == 0 && n.InhabitLeadingZero && index != -1 {
+			if len(n.Dictionary) > 1 {
+				r = rand.Int() % (len(n.Dictionary) - 1)
+				s := remove(n.Dictionary, index)
 				d = s[r]
 
 			} else {
-				return "`Picker.InhabitLeadingZero` is enabled, but `Picker.AllowDigits` only contains '0'!"
+				return "`Picker.InhabitLeadingZero` is enabled, but `Picker.Dictionary` only contains '0'!"
 			}
 		}
 

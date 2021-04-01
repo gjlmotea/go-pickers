@@ -16,8 +16,8 @@ const (
 )
 
 var DefaultLetters = []byte{
-	'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'p', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-	'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'p', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+	'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+	'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 }
 
 type Picker struct {
@@ -26,24 +26,24 @@ type Picker struct {
 	// 指定數字長度，預設長度為1，因可設超長長度，所以型態為string而非int
 	Length int
 	// 允許出現的Letter，預設允許全部
-	AllowLetters []byte
+	Dictionary []byte
 }
 
 // NewPicker returns a new Picker
-func NewPicker() (p Picker) {
+func NewPicker() (l Picker) {
 	rand.Seed(time.Now().UnixNano())
-	p.Length = 1
-	p.AllowLetters = DefaultLetters
-	return p
+	l.Length = 1
+	l.Dictionary = DefaultLetters
+	return l
 }
 
 // Pick pick and return a random number.
-// If Picker.AllowDigits is nil, it return empty string.
-func (p *Picker) Pick() (number string) {
-	bytes := p.pick()
-	switch p.Case {
+// If Picker.Dictionary is nil, it return empty string.
+func (l *Picker) Pick() (number string) {
+	bytes := l.pick()
+	switch l.Case {
 	case CaseInsensitive:
-		return
+		return string(bytes)
 	case CaseUpper:
 		for i := 0; i < len(bytes); i++ {
 			if bytes[i] >= 'a' && bytes[i] <= 'z' {
@@ -103,14 +103,14 @@ func (p *Picker) Pick() (number string) {
 	}
 }
 
-func (p *Picker) pick() (bytes []byte) {
-	if p.AllowLetters == nil {
+func (l *Picker) pick() (bytes []byte) {
+	if l.Dictionary == nil {
 		return
 	}
 
-	for i := 0; i < p.Length; i++ {
-		r := rand.Int() % len(p.AllowLetters)
-		d := p.AllowLetters[r]
+	for i := 0; i < l.Length; i++ {
+		r := rand.Int() % len(l.Dictionary)
+		d := l.Dictionary[r]
 		bytes = append(bytes, d)
 	}
 
@@ -124,7 +124,7 @@ func (p *Picker) pick() (bytes []byte) {
 // It means that the same value won't be returned by PickUp twice or more,
 // Just like that something(or choice) was picked up, and never put it back,
 // until use func PutAllBack.
-func (p *Picker) PickUp() (number string) {
+func (l *Picker) PickUp() (number string) {
 	return
 }
 
