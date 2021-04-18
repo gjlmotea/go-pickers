@@ -124,10 +124,12 @@ func (l *Picker) pick() (bytes []byte) {
 // It means that the same value won't be returned by PickUp twice or more,
 // Just like that something(or choice) was picked up, and never put it back,
 // until use func PutAllBack.
+// TODO
 func (l *Picker) PickUp() (number string) {
 	return
 }
 
+// TODO
 func PutAllBack() {
 
 }
