@@ -1,4 +1,4 @@
-package number
+package main
 
 import (
 	"math/rand"
@@ -7,7 +7,7 @@ import (
 
 var DefaultDigits = []byte{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}
 
-type Picker struct {
+type NumberPicker struct {
 	// 指定數字長度，預設長度為1，因可設超長長度，所以型態為string而非int
 	Length int
 	// 允許出現的Digit，預設允許全部
@@ -16,8 +16,8 @@ type Picker struct {
 	InhabitLeadingZero bool
 }
 
-// NewPicker returns a new Picker
-func NewPicker() (n Picker) {
+// NewNumberPicker returns a new NumberPicker
+func NewNumberPicker() (n NumberPicker) {
 	rand.Seed(time.Now().UnixNano())
 	n.Length = 1
 	n.Dictionary = DefaultDigits
@@ -25,8 +25,8 @@ func NewPicker() (n Picker) {
 }
 
 // Pick pick and return a random number.
-// If Picker.Dictionary is nil, it return empty string.
-func (n *Picker) Pick() (number string) {
+// If NumberPicker.Dictionary is nil, it return empty string.
+func (n *NumberPicker) Pick() (number string) {
 	if n.Dictionary == nil {
 		return
 	}
@@ -44,7 +44,7 @@ func (n *Picker) Pick() (number string) {
 				d = s[r]
 
 			} else {
-				return "`Picker.InhabitLeadingZero` is enabled, but `Picker.Dictionary` only contains '0'!"
+				return "`NumberPicker.InhabitLeadingZero` is enabled, but `NumberPicker.Dictionary` only contains '0'!"
 			}
 		}
 

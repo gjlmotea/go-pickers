@@ -1,4 +1,4 @@
-package letter
+package main
 
 import (
 	"math/rand"
@@ -20,7 +20,7 @@ var DefaultLetters = []byte{
 	'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 }
 
-type Picker struct {
+type LetterPicker struct {
 	// 全大寫、全小寫、字首大寫、字首小寫、大寫交錯、小寫交錯
 	Case int
 	// 指定數字長度，預設長度為1，因可設超長長度，所以型態為string而非int
@@ -29,8 +29,8 @@ type Picker struct {
 	Dictionary []byte
 }
 
-// NewPicker returns a new Picker
-func NewPicker() (l Picker) {
+// NewLetterPicker returns a new LetterPicker
+func NewLetterPicker() (l LetterPicker) {
 	rand.Seed(time.Now().UnixNano())
 	l.Length = 1
 	l.Dictionary = DefaultLetters
@@ -38,8 +38,8 @@ func NewPicker() (l Picker) {
 }
 
 // Pick pick and return a random number.
-// If Picker.Dictionary is nil, it return empty string.
-func (l *Picker) Pick() (number string) {
+// If LetterPicker.Dictionary is nil, it return empty string.
+func (l *LetterPicker) Pick() (number string) {
 	bytes := l.pick()
 	switch l.Case {
 	case CaseInsensitive:
@@ -103,7 +103,7 @@ func (l *Picker) Pick() (number string) {
 	}
 }
 
-func (l *Picker) pick() (bytes []byte) {
+func (l *LetterPicker) pick() (bytes []byte) {
 	if l.Dictionary == nil {
 		return
 	}
@@ -115,21 +115,4 @@ func (l *Picker) pick() (bytes []byte) {
 	}
 
 	return
-}
-
-// PickUp pick and return a unique random number.
-// The only difference between PickUp and Pick is:
-// PickUp will remember the value which had returned,
-// and keep in a map structure to compare with the next PickUp value.
-// It means that the same value won't be returned by PickUp twice or more,
-// Just like that something(or choice) was picked up, and never put it back,
-// until use func PutAllBack.
-// TODO
-func (l *Picker) PickUp() (number string) {
-	return
-}
-
-// TODO
-func PutAllBack() {
-
 }
